@@ -1,0 +1,25 @@
+{% extends "main/site_base.html" %}
+
+{% block sidebar %}
+    <div >
+		<a href="{% url 'profile' %}" class="list-group-item list-group-item-action" aria-current="true">Мой профиль</a>
+		<a href="{% url 'post_list' %}" class="list-group-item list-group-item-action">Все заявки</a>
+		<a href="{% url 'category_list' %}" class="list-group-item list-group-item-action">Все категории</a>
+		<a href="{% url 'category_create' %}" class="list-group-item list-group-item-action">Создать категорию</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+    <div >
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Category create</legend>
+                {{ form }}
+            </fieldset>
+            <div >
+                <button class="btn btn-outline-info" type="submit">Post</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends 'main/site_base.html' %}
+
+{% block sidebar %}
+    <div >
+		<a href="{% url 'profile' %}" class="list-group-item list-group-item-action" aria-current="true">Мой профиль</a>
+		<a href="{% url 'post_list' %}" class="list-group-item list-group-item-action">Все заявки</a>
+		<a href="{% url 'category_list' %}" class="list-group-item list-group-item-action">Все категории</a>
+		<a href="{% url 'category_create' %}" class="list-group-item list-group-item-action">Создать категорию</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+  {% for category in categories %}
+    <article >
+      <div >
+        <h4>
+            <a  href="{% url 'category_detail' category.id %}">{{ category.title }}</a>
+        </h4>
+      </div>
+    </article>
+  {% endfor %}
+{% endblock %}

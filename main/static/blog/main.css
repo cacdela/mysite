@@ -1,0 +1,19 @@
+.list-group{
+    display:flex;
+    flex-direction: column;
+
+}
+
+form,fieldset    {
+    display:flex;
+    gap: 10px;
+    flex-direction: column;
+}
+body, body div, body header, body main {
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #90e0a5;
+    gap: 1rem;
+}
+

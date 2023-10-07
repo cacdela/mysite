@@ -1,0 +1,53 @@
+{% extends "main/site_base.html" %}
+
+{% block sidebar %}
+  <div class="group">
+    <a href="{% url 'profile' %}" aria-current="true">Мой профиль</a>
+    {% if user.is_superuser %}
+      <a href="{% url 'post_create' %}">Создать заявку</a>
+      <a href="{% url 'post_list' %}">Все заявки</a>
+      <a href="{% url 'post_list' %}?sort=date&filter=completed">Главная</a>
+    {% else %}
+      <a href="{% url 'post_create' %}">Создать заявку</a>
+      <a href="{% url 'post_list' %}">Все заявки</a>
+      <a href="{% url 'post_list' %}?sort=date&filter=completed">Главная</a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block content %}
+    {% for post in posts %}
+        <article>
+          <img src="{{ post.author.profile.image.url }}">
+          <div>
+            <div>
+              <a href="{% url 'user-posts' post.author.username %}">{{ post.author }}</a>
+              <small>{{ post.date_posted|date:"F d, Y" }}</small>
+            </div>
+            <h2><a href="{% url 'post-detail' post.id %}">{{ post.title }}</a></h2>
+            <p>{{ post.content }}</p>
+          </div>
+        </article>
+    {% endfor %}
+    {% comment %} {% if is_paginated %}
+
+      {% if page_obj.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+        {% if page_obj.number == num %}
+          <a href="?page={{ num }}">{{ num }}</a>
+        {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+          <a href="?page={{ num }}">{{ num }}</a>
+        {% endif %}
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+        <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.paginator.num_pages }}">Last</a>
+      {% endif %}
+
+    {% endif %} {% endcomment %}
+{% endblock content %}

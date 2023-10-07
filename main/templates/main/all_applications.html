@@ -1,0 +1,55 @@
+{% extends 'main/site_base.html' %}
+
+{% block sidebar %}
+    <div class="list-group">
+		<a href="{% url 'profile' %}" class="list-group-item list-group-item-action" aria-current="true">Профиль</a>
+		<a href="{% url 'post_list' %}" class="list-group-item list-group-item-action">Все заявки</a>
+		<a href="{% url 'category_list' %}" class="list-group-item list-group-item-action">Все категории</a>
+		<a href="{% url 'category_create' %}" class="list-group-item list-group-item-action">Создать категорию</a>
+	</div>
+{% endblock %}
+
+{% block content %}
+{% comment %} <h1 class="mb-3">Запросы: {{ user.username }}</h1> {% endcomment %}
+{% if post_count %}
+    <h5>Кол-во заявок принятых в работу: {{ post_count }}</h5>
+    <hr />
+{% endif %}
+
+{% if page != 'home' %}
+    <div class="form-group">
+    	<form method="GET">
+      		<label for="exampleFormControlSelect1">Фильтровать по статусу: {{ status }}</label>
+      		<div class="d-flex">
+        		<select name="status" class="form-control" id="exampleFormControlSelect1">
+          			<option {% if status == "new" %} selected {% endif %} name="new" value="new">Новая</option>
+          			<option {% if status == "in_progress" %} selected {% endif %} name="in_progress" value="in_progress">В работе</option>
+          			<option {% if status == "completed" %} selected {% endif %} name="completed" value="completed">Выполнено</option>
+        		</select>
+        		<button type="submit" class="btn btn-primary ml-3">Применить</button>
+      		</div>
+    	</form>
+ 	</div>
+{% endif %}
+
+  {% for post in posts %}
+    <article class="media content-section">
+      <img class="rounded-circle article-img" src="{{ post.user.profile.image.url }}" />
+      <div class="media-body">
+        <div class="article-metadata">
+          <a class="mr-2" href="{% url 'post_list' post.user.username %}">{{ post.user.username }}</a>
+          
+          <small class="text-muted">{{ post.created_at }}</small>
+          <small class="text-muted">{{ post.category }}</small>
+          <small class="text-muted">
+            {% if post.status == 'new' %} Новая {% endif %}
+            {% if post.status == 'in_progress' %} В процессе {% endif %}
+            {% if post.status == 'completed' %} Выполнено {% endif %}
+          </small>
+        </div>
+        <h2><a class="article-title" href="{% url 'post_detail' post.id %}">{{ post.title }}</a></h2>
+        <p class="article-content">{{ post.content }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endblock %}

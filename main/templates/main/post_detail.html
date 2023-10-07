@@ -1,0 +1,40 @@
+{% extends 'main/site_base.html' %}
+
+{% block sidebar %}
+  <div class="list-group">
+    <a href="{% url 'profile' %}" class="list-group-item list-group-item-action" aria-current="true">Мой профиль</a>
+    {% if user.is_superuser %}
+      <a href="{% url 'post_list' %}" class="list-group-item list-group-item-action">Все заявки</a>
+      <a href="{% url 'category_list' %}" class="list-group-item list-group-item-action">Все категории</a>
+      <a href="{% url 'category_create' %}" class="list-group-item list-group-item-action">Создать категорию</a>
+    {% else %}
+      <a href="{% url 'post_list' %}?sort=date&filter=completed" class="list-group-item list-group-item-action">Главная</a>
+      <a href="{% url 'post_list' %}" class="list-group-item list-group-item-action">Все заявки</a>
+      <a href="{% url 'post_create' %}" class="list-group-item list-group-item-action">Создать заявку</a>
+    {% endif %}
+  </div>
+{% endblock %}
+
+{% block content %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ post.user.profile.image.url }}" />
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'post_list' %}">{{ post.user.username }}</a>
+        <small class="text-muted">{{ post.created_at }}</small>
+        <small class="text-muted">{{ post.category }}</small>
+        <small class="text-muted">
+          {% if post.status == 'new' %} Новая {% endif %}
+          {% if post.status == 'in_progress' %} В процессе {% endif %}
+          {% if post.status == 'completed' %} Выполнено {% endif %}
+        </small>
+          <div>
+            <a class="btn btn-success btn-sm mt-1 mb-1" href="{% url 'post_edit' post.id %}">Изменить</a>
+          </div>
+      </div>
+      <img class="w-100" src="{{ post.image.url }}" />
+      <h2 class="article-title">{{ post.title }}</h2>
+      <p class="article-content">{{ post.content }}</p>
+    </div>
+  </article>
+{% endblock %}
